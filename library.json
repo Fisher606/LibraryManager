@@ -1,16 +1,9 @@
 [
     {
-        "id": 1,
-        "title": "Маугли",
-        "author": "Ридьярд Киплинг",
-        "year": 1888,
+        "id": "1",
+        "title": "Test Book",
+        "author": "Test Author",
+        "year": "2024",
         "status": "выдана"
-    },
-    {
-        "id": 2,
-        "title": "Диверсант",
-        "author": "Азольский",
-        "year": 1946,
-        "status": "в наличии"
     }
 ]

@@ -18,4 +18,4 @@
 ### Установка и запуск:
 1. Клонировать репозиторий:
    ```bash
-   git clone https://github.com/твое_имя/LibraryManager.git
+   git clone https://github.com/Fisher606/LibraryManager.git

@@ -1,40 +1,43 @@
 import json
 from typing import List, Optional, Dict
 
-# Define the file to store library data
+# Определяем файл для хранения данных библиотеки
 LIBRARY_FILE = "library.json"
 
-# Book structure
+# Структура книги
 class Book:
     def __init__(self, id: int, title: str, author: str, year: int, status: str = "в наличии"):
-        self.id = id
-        self.title = title
-        self.author = author
-        self.year = year
-        self.status = status
+        self.id: int = id
+        self.title: str = title
+        self.author: str = author
+        self.year: int = year
+        self.status: str = status
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> Dict[str, str]:
+        """Преобразует объект книги в словарь."""
         return {
-            "id": self.id,
+            "id": str(self.id),
             "title": self.title,
             "author": self.author,
-            "year": self.year,
+            "year": str(self.year),
             "status": self.status
         }
 
     @staticmethod
-    def from_dict(data: Dict):
+    def from_dict(data: Dict[str, str]) -> 'Book':
+        """Создаёт объект книги из словаря."""
         return Book(
-            id=data["id"],
+            id=int(data["id"]),
             title=data["title"],
             author=data["author"],
-            year=data["year"],
+            year=int(data["year"]),
             status=data["status"]
         )
 
 
-# Utility functions for file handling
+# Утилиты для работы с файлами
 def load_library() -> List[Book]:
+    """Загружает библиотеку книг из файла."""
     try:
         with open(LIBRARY_FILE, "r", encoding="utf-8") as file:
             return [Book.from_dict(book) for book in json.load(file)]
@@ -43,13 +46,15 @@ def load_library() -> List[Book]:
 
 
 def save_library(books: List[Book]) -> None:
+    """Сохраняет список книг в файл."""
     with open(LIBRARY_FILE, "w", encoding="utf-8") as file:
         json.dump([book.to_dict() for book in books], file, ensure_ascii=False, indent=4)
-    print("Данные записаны в library.json.")  # Выводим сообщение, что данные сохранены
+    print("Данные записаны в library.json.")  # Сообщение о том, что данные сохранены
 
 
-# Library operations
+# Операции с библиотекой
 def add_book(title: str, author: str, year: int) -> Book:
+    """Добавляет книгу в библиотеку."""
     books = load_library()
     new_id = max((book.id for book in books), default=0) + 1
     new_book = Book(id=new_id, title=title, author=author, year=year)
@@ -59,15 +64,17 @@ def add_book(title: str, author: str, year: int) -> Book:
 
 
 def remove_book(book_id: int) -> bool:
+    """Удаляет книгу по её ID."""
     books = load_library()
     filtered_books = [book for book in books if book.id != book_id]
-    if len(filtered_books) == len(books):  # No book removed
+    if len(filtered_books) == len(books):  # Если книга не найдена
         return False
     save_library(filtered_books)
     return True
 
 
 def search_books(title: Optional[str] = None, author: Optional[str] = None, year: Optional[int] = None) -> List[Book]:
+    """Ищет книги по названию, автору или году."""
     books = load_library()
     results = books
     if title:
@@ -80,10 +87,12 @@ def search_books(title: Optional[str] = None, author: Optional[str] = None, year
 
 
 def list_books() -> List[Book]:
+    """Возвращает список всех книг в библиотеке."""
     return load_library()
 
 
 def update_book_status(book_id: int, status: str) -> bool:
+    """Обновляет статус книги (например, 'в наличии' или 'выдана')."""
     if status not in ["в наличии", "выдана"]:
         raise ValueError("Invalid status. Use 'в наличии' or 'выдана'.")
     books = load_library()
@@ -95,8 +104,9 @@ def update_book_status(book_id: int, status: str) -> bool:
     return False
 
 
-# Main console interface
-def main():
+# Главный интерфейс программы
+def main() -> None:
+    """Основной интерфейс для работы с библиотекой через командную строку."""
     while True:
         print("\n--- Библиотека книг ---")
         print("1. Добавить книгу")
